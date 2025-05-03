@@ -47,8 +47,7 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <h1 className="page-title">Anime Search</h1>
-      <SearchBar onSearch={handleSearch} isLoading={loading} debounceTime={400} />
+      <SearchBar onSearch={handleSearch} isLoading={loading} debounceTime={250} />
 
       <h2 className="section-title">
         {searchQuery ? `Results for "${searchQuery}"` : 'Top Anime'}

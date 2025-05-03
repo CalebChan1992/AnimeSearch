@@ -42,38 +42,42 @@ const AnimeDetail = () => {
   }
 
   return (
-    <div className="anime-detail">
-      <Link to="/" className="back-button">← Back to Search</Link>
+    <div className="anime-detail-container">
+      <div className="anime-detail-layout">
+        <div className="anime-image-container">
+          <img
+            src={anime.images.jpg.large_image_url}
+            alt={anime.title}
+            className="anime-cover"
+          />
+          <Link to="/" className="back-button">← Back</Link>
+        </div>
 
-      <div className="anime-header">
-        <img
-          src={anime.images.jpg.large_image_url}
-          alt={anime.title}
-          className="anime-cover"
-        />
+        <div className="anime-content">
+          <div className="synopsis-section">
+            <h2>Synopsis</h2>
+            <p>{anime.synopsis || 'No synopsis available.'}</p>
+          </div>
 
-        <div className="anime-header-info">
-          <h1 className="anime-title">{anime.title}</h1>
+          <div className="anime-stats-row">
+            <div className="stat-box score-box">
+              <div className="stat-value score-value">{anime.score || 'N/A'}</div>
+              <div className="stat-label">SCORE</div>
+            </div>
 
-          <div className="anime-stats">
-            <div className="stat">
-              <span className="stat-label">Score:</span>
-              <span className="stat-value">{anime.score || 'N/A'}</span>
+            <div className="stat-box rank-box">
+              <div className="stat-value rank-value">#{anime.mal_id || '?'}</div>
+              <div className="stat-label">RANK</div>
             </div>
-            <div className="stat">
-              <span className="stat-label">Episodes:</span>
-              <span className="stat-value">{anime.episodes || 'Unknown'}</span>
+
+            <div className="stat-box popularity-box">
+              <div className="stat-value popularity-value">#{anime.mal_id || '?'}</div>
+              <div className="stat-label">POPULARITY</div>
             </div>
-            <div className="stat">
-              <span className="stat-label">Status:</span>
-              <span className="stat-value">{anime.status}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Aired:</span>
-              <span className="stat-value">
-                {anime.aired.from ? new Date(anime.aired.from).toLocaleDateString() : 'Unknown'}
-                {anime.aired.to ? ` to ${new Date(anime.aired.to).toLocaleDateString()}` : ''}
-              </span>
+
+            <div className="stat-box members-box">
+              <div className="stat-value members-value">{anime.episodes ? anime.episodes.toLocaleString() : '?'}</div>
+              <div className="stat-label">MEMBERS</div>
             </div>
           </div>
 
@@ -87,10 +91,7 @@ const AnimeDetail = () => {
         </div>
       </div>
 
-      <div className="anime-synopsis">
-        <h2>Synopsis</h2>
-        <p>{anime.synopsis || 'No synopsis available.'}</p>
-      </div>
+
     </div>
   );
 };

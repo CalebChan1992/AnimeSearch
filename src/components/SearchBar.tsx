@@ -14,10 +14,9 @@ const SearchBar = ({ onSearch, debounceTime = 500, isLoading = false }: SearchBa
 
   // Effect to trigger search when the debounced query changes
   useEffect(() => {
-    if (debouncedQuery.trim()) {
-      onSearch(debouncedQuery);
-      setIsTyping(false);
-    }
+    // Always trigger search, even when query is empty
+    onSearch(debouncedQuery.trim());
+    setIsTyping(false);
   }, [debouncedQuery, onSearch]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +34,8 @@ const SearchBar = ({ onSearch, debounceTime = 500, isLoading = false }: SearchBa
 
   const handleClear = () => {
     setQuery('');
-    onSearch('');
+    // The empty string will be passed to onSearch via the useEffect hook
+    // when the debouncedQuery updates
     setIsTyping(false);
   };
 

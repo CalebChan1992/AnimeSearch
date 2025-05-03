@@ -1,15 +1,3 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: var(--text-primary);
-  background-color: var(--background-light);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,41 +8,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+/* These styles will be overridden by MUI but kept for non-MUI elements */
 a {
-  color: var(--primary-color);
   text-decoration: none;
-}
-
-a:hover {
-  color: var(--primary-hover);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  line-height: 1.2;
-  margin-bottom: 0.5em;
-}
-
-button {
-  border-radius: var(--border-radius-sm);
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--background-white);
-  cursor: pointer;
-  transition: border-color var(--transition-normal), background-color var(--transition-normal);
-}
-
-button:hover {
-  border-color: var(--primary-color);
-  background-color: var(--secondary-color);
-}
-
-button:focus,
-button:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
 }

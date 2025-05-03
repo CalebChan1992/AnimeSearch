@@ -30,6 +30,12 @@ This project uses the [Jikan API](https://jikan.moe/), an unofficial MyAnimeList
 - Detailed anime information
 - And more!
 
+The UI is built with [Material-UI (MUI)](https://mui.com/), a popular React UI framework that implements Google's Material Design. Key features include:
+
+- Responsive design with MUI components
+- Custom theme configuration
+- Consistent styling across the application
+
 ## Getting Started
 
 ### Prerequisites
@@ -72,10 +78,23 @@ AnimeSearch/
 ├── public/             # Static files
 ├── src/                # Source files
 │   ├── components/     # Reusable components
+│   │   ├── AnimeCard.tsx     # Card component for displaying anime
+│   │   ├── AnimeList.tsx     # List component for displaying multiple anime
+│   │   ├── ErrorBoundary.tsx # Error handling component
+│   │   ├── Header.tsx        # App header component
+│   │   ├── Pagination.tsx    # Pagination controls
+│   │   ├── ScrollToTop.tsx   # Utility for scrolling to top on navigation
+│   │   └── SearchBar.tsx     # Search input component
 │   ├── pages/          # Page components
+│   │   ├── AnimeDetail.tsx   # Detail page for a single anime
+│   │   └── Home.tsx          # Home page with search and anime list
 │   ├── services/       # API services
+│   │   └── animeService.ts   # Service for Jikan API calls
 │   ├── types/          # TypeScript type definitions
+│   │   └── anime.ts          # Type definitions for anime data
 │   ├── hooks/          # Custom React hooks
+│   │   └── useDebounce.ts    # Hook for debouncing search input
+│   ├── theme.ts        # MUI theme configuration
 │   ├── App.tsx         # Main App component
 │   ├── main.tsx        # Entry point
 │   └── ...
@@ -83,6 +102,7 @@ AnimeSearch/
 ├── package.json        # Project dependencies and scripts
 ├── tsconfig.json       # TypeScript configuration
 ├── vite.config.ts      # Vite configuration
+├── eslint.config.js    # ESLint configuration
 └── README.md           # Project documentation
 ```
 

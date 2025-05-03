@@ -12,6 +12,7 @@ export interface Anime {
   score: number;
   episodes: number;
   status: string;
+  type: string;
   aired: {
     from: string;
     to: string;
@@ -20,6 +21,10 @@ export interface Anime {
     mal_id: number;
     name: string;
   }[];
+  rank?: number;
+  popularity?: number;
+  members?: number;
+  uniqueKey?: string | number; // Added for handling duplicate IDs in lists
 }
 
 export interface AnimeResponse {

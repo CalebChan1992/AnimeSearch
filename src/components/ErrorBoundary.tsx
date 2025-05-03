@@ -1,17 +1,55 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { Box, Typography, Button, Container, Paper } from '@mui/material';
 
-interface Props {
-  children: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
+interface FallbackProps {
   error: Error | null;
+  resetErrorBoundary: () => void;
 }
 
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  FallbackComponent?: React.ComponentType<FallbackProps>;
+  onError?: (error: Error, info: { componentStack: string }) => void;
+}
+
+// Fallback component to display when an error occurs
+const DefaultFallback = ({ error, resetErrorBoundary }: FallbackProps) => (
+  <Container maxWidth="md" sx={{ mt: 8 }}>
+    <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+      <Box sx={{ textAlign: 'center', py: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom color="error">
+          Something went wrong
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 4 }}>
+          We're sorry, but an error occurred while rendering this page.
+        </Typography>
+        {error && (
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 4, fontFamily: 'monospace', p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+            {error.toString()}
+          </Typography>
+        )}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={resetErrorBoundary}
+          sx={{ mt: 2 }}
+        >
+          Reload Page
+        </Button>
+      </Box>
+    </Paper>
+  </Container>
+);
+
+// Since React doesn't have a hook-based error boundary API yet,
+// we need to create a wrapper component that uses the class-based API
+class ErrorBoundaryInner extends React.Component<
+  ErrorBoundaryProps & {
+    setError: (error: Error | null) => void
+  },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: ErrorBoundaryProps & { setError: (error: Error | null) => void }) {
     super(props);
     this.state = {
       hasError: false,
@@ -19,54 +57,64 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  // We need to accept the error parameter for the React API
+  static getDerivedStateFromError(error: Error) {
     return {
       hasError: true,
-      error
+      error: error
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+  componentDidCatch(error: Error, info: { componentStack: string }) {
+    this.props.setError(error);
+    this.setState({ error });
+    if (this.props.onError) {
+      this.props.onError(error, info);
+    }
   }
 
-  handleReload = (): void => {
-    window.location.reload();
-  };
-
-  render(): ReactNode {
+  render() {
     if (this.state.hasError) {
+      const FallbackComponent = this.props.FallbackComponent || DefaultFallback;
       return (
-        <Container maxWidth="md" sx={{ mt: 8 }}>
-          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography variant="h4" component="h1" gutterBottom color="error">
-                Something went wrong
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 4 }}>
-                We're sorry, but an error occurred while rendering this page.
-              </Typography>
-              {this.state.error && (
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 4, fontFamily: 'monospace', p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-                  {this.state.error.toString()}
-                </Typography>
-              )}
-              <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={this.handleReload}
-                sx={{ mt: 2 }}
-              >
-                Reload Page
-              </Button>
-            </Box>
-          </Paper>
-        </Container>
+        <FallbackComponent
+          error={this.state.error}
+          resetErrorBoundary={() => {
+            this.setState({ hasError: false, error: null });
+            this.props.setError(null);
+            window.location.reload();
+          }}
+        />
       );
     }
 
     return this.props.children;
   }
+}
+
+// Function component wrapper for the error boundary
+const ErrorBoundary = ({
+  children,
+  FallbackComponent,
+  onError
+}: ErrorBoundaryProps) => {
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (error && onError) {
+      console.error('Error caught by ErrorBoundary:', error);
+    }
+  }, [error, onError]);
+
+  return (
+    <ErrorBoundaryInner
+      setError={setError}
+      FallbackComponent={FallbackComponent}
+      onError={onError}
+    >
+      {children}
+    </ErrorBoundaryInner>
+  );
 }
 
 export default ErrorBoundary;

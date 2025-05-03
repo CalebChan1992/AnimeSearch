@@ -2,12 +2,11 @@
 
 A modern web application for searching and exploring anime using the Jikan API (MyAnimeList unofficial API).
 
-![Anime Search App](https://via.placeholder.com/800x400?text=Anime+Search+App)
-
 ## Features
 
 - Search for anime by title
 - Browse top-rated anime
+- Sort anime by ranking, score, popularity, or members
 - View detailed information about each anime
 - Responsive design for desktop and mobile devices
 - Pagination for browsing through large result sets
@@ -28,7 +27,14 @@ This project uses the [Jikan API](https://jikan.moe/), an unofficial MyAnimeList
 - Search functionality
 - Top anime listings
 - Detailed anime information
+- Anime rankings, scores, popularity metrics, and member counts
 - And more!
+
+The application leverages these data points to provide sorting functionality, allowing users to organize anime by:
+- Rank (ascending order, with rank 1 being the best)
+- Score (descending order, with higher scores at the top)
+- Popularity (ascending order, with popularity rank 1 being the most popular)
+- Members (descending order, with higher member counts at the top)
 
 The UI is built with [Material-UI (MUI)](https://mui.com/), a popular React UI framework that implements Google's Material Design. Key features include:
 
@@ -84,7 +90,8 @@ AnimeSearch/
 │   │   ├── Header.tsx        # App header component
 │   │   ├── Pagination.tsx    # Pagination controls
 │   │   ├── ScrollToTop.tsx   # Utility for scrolling to top on navigation
-│   │   └── SearchBar.tsx     # Search input component
+│   │   ├── SearchBar.tsx     # Search input component
+│   │   └── SortSelector.tsx  # Sorting options dropdown
 │   ├── pages/          # Page components
 │   │   ├── AnimeDetail.tsx   # Detail page for a single anime
 │   │   └── Home.tsx          # Home page with search and anime list

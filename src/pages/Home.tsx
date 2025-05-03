@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography, Box, Stack } from '@mui/material';
 import SearchBar from '../components/SearchBar';
 import AnimeList from '../components/AnimeList';
 import Pagination from '../components/Pagination';
+import SortSelector, { SortOption } from '../components/SortSelector';
 import { getTopAnime, searchAnime } from '../services/animeService';
 import { Anime } from '../types/anime';
 
@@ -12,6 +13,7 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState<SortOption>('none');
 
   // Use a ref to track if this is the initial render
   const isInitialRender = useRef(true);
@@ -106,25 +108,40 @@ const Home = () => {
     });
   };
 
+  const handleSortChange = (value: SortOption) => {
+    setSortOption(value);
+  };
+
   return (
     <Box>
       <SearchBar onSearch={handleSearch} isLoading={loading} debounceTime={250} />
 
       <Container maxWidth={false} sx={{ width: '1200px' }}>
-        <Typography
-          variant="h5"
-          component="h2"
-          sx={{
-            mt: 4,
-            mb: 2,
-            color: 'text.secondary',
-            fontWeight: 500
-          }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mt: 4, mb: 2 }}
         >
-          {searchQuery ? `Results for "${searchQuery}"` : 'Top Anime'}
-        </Typography>
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              color: 'text.secondary',
+              fontWeight: 500
+            }}
+          >
+            {searchQuery ? `Results for "${searchQuery}"` : 'Top Anime'}
+          </Typography>
 
-        <AnimeList animeList={animeList} loading={loading} />
+          <SortSelector
+            value={sortOption}
+            onChange={handleSortChange}
+            disabled={loading || animeList.length === 0}
+          />
+        </Stack>
+
+        <AnimeList animeList={animeList} loading={loading} sortBy={sortOption} />
 
         {!loading && animeList.length > 0 && (
           <Box component="div" onClick={(e) => e.stopPropagation()}>
